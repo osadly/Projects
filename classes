@@ -1,0 +1,37 @@
+# Base class for database records
+class Record:
+    def __init__(self, employee_id=""):
+        self.employee_id = employee_id
+
+    # Factory method to create the correct subclass based on employee_id
+    @classmethod
+    def create_record(cls, employee_id="", **kwargs):
+        if employee_id:
+            return EmployeeRecord(employee_id=employee_id, **kwargs)
+        else:
+            return CustomerRecord(**kwargs)
+
+# Subclass for employee records
+class EmployeeRecord(Record):
+    def __init__(self, employee_id, name):
+        super().__init__(employee_id=employee_id)
+        self.name = name
+
+    def get_info(self):
+        return f"Employee Name: {self.name}, Employee ID: {self.employee_id}"
+
+# Subclass for customer records
+class CustomerRecord(Record):
+    def __init__(self, name):
+        super().__init__(employee_id="")
+        self.name = name
+
+    def get_info(self):
+        return f"Customer Name: {self.name}"
+
+# Usage example
+record1 = Record.create_record(employee_id="E123", name="Alice")
+record2 = Record.create_record(employee_id="", name="Bob")
+
+print(record1.get_info())  # Output: Employee Name: Alice, Employee ID: E123
+print(record2.get_info())  # Output: Customer Name: Bob
